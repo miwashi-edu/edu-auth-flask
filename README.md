@@ -6,13 +6,17 @@
 cd ~
 cd ws
 mkdir auth-server && cd auth-server
-pip install Flask PyJWT
-mkdir ./static
-touch ./{server.py,auth_routes.py,static/index.js,static/index.html,static/index.css}
+pip install Flask PyJWT flask_cors
+mkdir -p {./static,./static/js,./static/css,./static/img}
+touch ./{server.py,auth_routes.py}
+toouch {./static/js/index.js,./static/css/index.css}
+mkdir templates
+touch ./templates/index.html
 #python3 -m venv venv
 #source venv/bin/activate
 echo "Flask" > requirements.txt
 echo "PyJWT" >> requirements.txt
+echo "flask_cors" >> requirements.txt
 ```
 
 ## server.py
@@ -26,13 +30,21 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from auth_routes import auth_blueprint
 
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS without any restrictions
 
+
 app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=3000)
 EOF
 ```
 
@@ -73,20 +85,20 @@ def login():
 EOF
 ```
 
-## static/index.html
+## templates/index.html
 
 ```bash
 cd ~
 cd ws
 cd auth-server
-cat > ./static/index.html << 'EOF'
+cat > ./templates/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
 </head>
 <body>
     <div id="login-form">
@@ -95,7 +107,7 @@ cat > ./static/index.html << 'EOF'
         <button onclick="login()">Login</button>
     </div>
     <div id="data"></div>
-    <script src="index.js"></script>
+    <script src="{{url_for('static', filename='js/index.js')}}"></script>
 </body>
 </html>
 
@@ -103,13 +115,13 @@ EOF
 ```
 
 
-## static/index.js
+## static/js/index.js
 
 ```bash
 cd ~
 cd ws
 cd auth-server
-cat > ./static/index.js << 'EOF'
+cat > ./static/js/index.js << 'EOF'
 function login() {
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
@@ -164,13 +176,13 @@ EOF
 ```
 
 
-## static/index.css
+## static/css/index.css
 
 ```bash
 cd ~
 cd ws
 cd auth-server
-cat > ./static/index.css << 'EOF'
+cat > ./static/css/index.css << 'EOF'
 /* Simple CSS for login form */
 #login-form {
     display: flex;
