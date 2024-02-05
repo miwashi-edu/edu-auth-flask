@@ -104,7 +104,7 @@ cat > ./templates/index.html << 'EOF'
     <div id="login-form">
         <input type="username" id="username" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Login</button>
+        <button id="login" onclick="login()">Login</button>
         <p id="login-message"></p> <!-- Added paragraph for login messages -->
     </div>
     <div id="data"></div>
