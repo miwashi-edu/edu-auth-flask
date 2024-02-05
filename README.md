@@ -98,19 +98,19 @@ cat > ./templates/index.html << 'EOF'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
     <div id="login-form">
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">Login</button>
+        <p id="login-message"></p> <!-- Added paragraph for login messages -->
     </div>
     <div id="data"></div>
-    <script src="{{url_for('static', filename='js/index.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>
-
 EOF
 ```
 
@@ -133,17 +133,20 @@ function login() {
         },
         body: JSON.stringify({email: email, password: password}),
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.token) {
-            localStorage.setItem('token', data.token);
-            fetchSecretData();
+    .then(response => {
+        if (response.ok) {
+            return response.json();
         } else {
-            alert('Login Failed');
+            throw new Error('Login Failed');
         }
     })
+    .then(data => {
+        localStorage.setItem('token', data.token);
+        document.getElementById('login-message').textContent = 'Login Successful!';
+        fetchSecretData();
+    })
     .catch((error) => {
-        console.error('Error:', error);
+        document.getElementById('login-message').textContent = error.message;
     });
 }
 
@@ -161,15 +164,17 @@ function fetchSecretData() {
         },
     })
     .then(response => {
-        if (response.ok) return response.json();
-        throw new Error('Network response was not ok.');
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('No access or token expired');
+        }
     })
     .then(data => {
         document.getElementById('data').innerText = data.data;
     })
     .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('data').innerText = 'No access';
+        document.getElementById('data').innerText = error.message;
     });
 }
 EOF
