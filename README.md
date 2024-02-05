@@ -26,7 +26,7 @@ cd ~
 cd ws
 cd auth-server
 cat > server.py << 'EOF'
-from flask import Flask, jsonify, request
+from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 from auth_routes import auth_blueprint
 
