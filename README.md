@@ -62,23 +62,23 @@ from functools import wraps
 
 auth_blueprint = Blueprint('auth', __name__)
 
-def isValidUser(email, password):
+def isValidUser(username, password):
     # This is a mock validation function. Replace it with your actual user validation logic
-    return email == 'user@example.com' and password == 'password'
+    return username == 'user@example.com' and password == 'password'
 
-def getUserRole(email):
+def getUserRole(username):
     # This is a mock function. Replace it with your actual logic to get a user's role
-    return 'admin' if email == 'admin@example.com' else 'user'
+    return 'admin' if username == 'admin@example.com' else 'user'
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
     data = request.json
-    email = data.get('email')
+    username = data.get('username')
     password = data.get('password')
 
-    if isValidUser(email, password):
+    if isValidUser(username, password):
         # Adjust 'secretKey' and expiration time as needed
-        token = jwt.encode({'email': email, 'role': getUserRole(email), 'exp': datetime.utcnow() + timedelta(hours=1)}, 'secretKey', algorithm="HS256")
+        token = jwt.encode({'username': username, 'role': getUserRole(username), 'exp': datetime.utcnow() + timedelta(hours=1)}, 'secretKey', algorithm="HS256")
         return jsonify({'token': token})
     else:
         return jsonify({'error': 'Invalid login'}), 401
@@ -102,7 +102,7 @@ cat > ./templates/index.html << 'EOF'
 </head>
 <body>
     <div id="login-form">
-        <input type="email" id="email" placeholder="Email">
+        <input type="username" id="username" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">Login</button>
         <p id="login-message"></p> <!-- Added paragraph for login messages -->
@@ -123,7 +123,7 @@ cd ws
 cd auth-server
 cat > ./static/js/index.js << 'EOF'
 function login() {
-    var email = document.getElementById('email').value;
+    var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
 
     fetch('/auth/login', {
@@ -131,7 +131,7 @@ function login() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email: email, password: password}),
+        body: JSON.stringify({username: username, password: password}),
     })
     .then(response => {
         if (response.ok) {
@@ -210,5 +210,5 @@ EOF
 ## Test server
 
 ```bash
-curl -X POST http://localhost:5000/auth/login -H "Content-Type: application/json" -d '{"email": "user@example.com", "password": "password"}' -w '%{http_code}' -o /dev/null
+curl -X POST http://localhost:5000/auth/login -H "Content-Type: application/json" -d '{"username": "user@example.com", "password": "password"}' -w '%{http_code}' -o /dev/null
 ```
