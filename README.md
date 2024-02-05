@@ -206,3 +206,9 @@ cat > ./static/css/index.css << 'EOF'
 }
 EOF
 ```
+
+## Test server
+
+```bash
+curl -X POST http://localhost:5000/auth/login -H "Content-Type: application/json" -d '{"email": "user@example.com", "password": "password"}' -w '%{http_code}' -o /dev/null
+```
