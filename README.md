@@ -7,6 +7,19 @@ docker build -t auth-server .
 docker run -p 3000:3000 auth-server
 ```
 
+## requirements.txt
+
+```bash
+cd ~
+cd ws
+cd auth-server
+cat > requirements.txt << 'EOF'
+Flask
+PyJWT
+flask_cors
+EOF
+```
+
 ## Dockerfile
 
 ```bash
