@@ -210,5 +210,5 @@ EOF
 ## Test server
 
 ```bash
-curl -X POST http://localhost:5000/auth/login -H "Content-Type: application/json" -d '{"username": "user@example.com", "password": "password"}' -w '%{http_code}' -o /dev/null
+curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d '{"username": "user@example.com", "password": "password"}' -w '%{http_code}' -o /dev/null
 ```
