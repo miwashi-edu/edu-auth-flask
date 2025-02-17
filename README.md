@@ -4,7 +4,7 @@
 
 ```bash
 docker build -t auth-server .
-docker run -p 3000:3000 auth-server
+docker run -p 3000:3000 --name auth-server auth-server 
 ```
 
 ## requirements.txt
