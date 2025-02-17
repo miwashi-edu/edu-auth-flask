@@ -9,7 +9,7 @@ mkdir auth-server && cd auth-server
 pip install Flask PyJWT flask_cors
 mkdir -p {./static,./static/js,./static/css,./static/img}
 touch ./{server.py,auth_routes.py}
-toouch {./static/js/index.js,./static/css/index.css}
+touch {./static/js/index.js,./static/css/index.css}
 mkdir templates
 touch ./templates/index.html
 python3 -m venv venv
