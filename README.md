@@ -12,11 +12,12 @@ touch ./{server.py,auth_routes.py}
 toouch {./static/js/index.js,./static/css/index.css}
 mkdir templates
 touch ./templates/index.html
-#python3 -m venv venv
-#source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 echo "Flask" > requirements.txt
 echo "PyJWT" >> requirements.txt
 echo "flask_cors" >> requirements.txt
+python3 -m pip install --no-cache-dir -r requirements.txt
 ```
 
 ## server.py
