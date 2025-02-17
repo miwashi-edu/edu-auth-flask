@@ -45,7 +45,7 @@ EXPOSE 3000
 # Define environment variables
 ENV FLASK_APP=server.py
 ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_ENV=development  # Change to "production" in a real environment
+ENV FLASK_ENV=development
 
 # Run the application
 CMD ["python", "server.py"]
